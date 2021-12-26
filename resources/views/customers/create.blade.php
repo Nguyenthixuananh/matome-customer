@@ -22,7 +22,17 @@
                         <label for="exampleInputEmail1">Ngày sinh</label>
                         <input type="date" class="form-control" name="dob" required>
                     </div>
+                    <div class="form-group">
+                        <label>Tỉnh thành</label>
+                        <select class="form-control" name="city_id">
+                            @foreach($cities as $city)
+                                <option value="{{ $city->id }}">{{ $city->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
+                    <button class="btn btn-secondary" onclick="window.history.go(-1); return false;">Hủy</button>
+
                 </form>
             </div>
         </div>

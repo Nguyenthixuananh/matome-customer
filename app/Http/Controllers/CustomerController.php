@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -14,13 +15,16 @@ class CustomerController extends Controller
     public function index()
     {
         $customers = Customer::all();
-        return view('customers.list', compact('customers'));
+        $cities = City::all();
+
+        return view('customers.list', compact('customers', 'cities'));
     }
 
 //   create(): show form tạo mới khách hàng
     public function create()
     {
-        return view('customers.create');
+        $cities = City::all();
+        return view('customers.create', compact('cities'));
     }
 
  //store(): thực hiện thêm mới khách hàng
@@ -30,6 +34,8 @@ class CustomerController extends Controller
         $customer->name = $request->input('name');
         $customer->email = $request->input('email');
         $customer->dob = $request->input('dob');
+        $customer->city_id = $request->input('city_id');
+
         $customer->save();
 
         //dung session de dua ra thong bao
@@ -42,7 +48,9 @@ class CustomerController extends Controller
     public function edit($id)
     {
         $customer = Customer::findOrFail($id);
-        return view('customers.edit', compact('customer'));
+        $cities = City::all();
+
+        return view('customers.edit', compact('customer', 'cities'));
     }
 
    //update(): thực hiện tác vụ sửa
@@ -52,6 +60,8 @@ class CustomerController extends Controller
         $customer->name = $request->input('name');
         $customer->email = $request->input('email');
         $customer->dob = $request->input('dob');
+        $customer->city_id = $request->input('city_id');
+
         $customer->save();
 
         //dung session de dua ra thong bao
@@ -71,5 +81,17 @@ class CustomerController extends Controller
 
         //xoa xong quay ve trang danh sach khach hang
         return redirect()->route('customers.index');
+    }
+
+    public function filterByCity(Request $request){
+        $idCity = $request->input('city_id');
+
+        $cityFilter = City::findOrFail($idCity);
+
+        $customers = Customer::where('city_id', $cityFilter->id)->get();
+        $totalCustomerFilter = count($customers);
+        $cities = City::all();
+
+        return view('customers.list', compact('customers', 'cities', 'totalCustomerFilter', 'cityFilter'));
     }
 }
