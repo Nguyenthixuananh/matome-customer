@@ -4,9 +4,27 @@
     <div class="col-12">
         <div class="row">
             <div class="col-12"><h1>Danh Sách Khách Hàng</h1></div>
+
             <a class="btn btn-outline-primary" href="" data-toggle="modal" data-target="#cityModal">
                 Lọc
             </a>
+            <div class="col-6">
+                <form class="navbar-form navbar-left" action="">
+                    @csrf
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-default">Tìm kiếm</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
             <div class="col-12">
                 @if (Session::has('success'))
                     <p class="text-success">
@@ -59,6 +77,9 @@
                 @endif
                 </tbody>
             </table>
+{{--            {{ $customers->links() }}--}}
+            {{ $customers->appends(request()->query()) }}
+
         </div>
 
         <!-- Modal -->
